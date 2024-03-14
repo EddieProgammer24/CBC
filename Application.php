@@ -111,58 +111,111 @@
     </li>
    <h3 class="select-university-header">Select University and a course for the options below:</h3>
   
+   <div class="university-course-pair">
+            <label for="university1">Select University:</label>
+            <select name="university1" class="university">
+                <option value="">Select</option>
+                <?php
+                // Fetch universities from the database
+                $connection = mysqli_connect("localhost", "root", "", "jsuars");
+                if (mysqli_connect_errno()) {
+                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                    exit();
+                }
 
- 
-   <div class="align-left">
-    <span class="details">Option1:</span>
-    <select id="sess1" name="sess1" class="col-75">
-        <option value="">Select University</option>
-        <?php
-   include 'get_University.php';
-   ?>
-    </select><br><br>
+                $query = "SELECT University_Code, University_Name FROM university";
+                $result = mysqli_query($connection, $query);
 
-    <span class="details">Option2:</span>
-    <select id="sess2" name="sess2" class="col-75">
-        <option value="">Select University</option>
-           <?php
-   include 'get_University.php';
-   ?>
-    </select><br><br>
+                // Populate dropdown with universities
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='" . $row['University_Code'] . "'>" . $row['University_Name'] . "</option>";
+                }
 
-    <span class="details">Option3:</span>
-    <select id="sess3" name="sess3" class="col-75">
-        <option value="">Select University</option>
-          <?php
-   include 'get_University.php';
-   ?>
-    </select>
-</div>
+                // Close connection
+                mysqli_close($connection);
+                ?>
+            </select>
+
+            <br>
+
+            <label for="course1">Select Course:</label>
+            <select name="course1" class="course">
+                <!-- Courses will be populated dynamically using JavaScript -->
+            </select>
+        </div>
+
+        <div class="university-course-pair">
+            <label for="university1">Select University:</label>
+            <select name="university1" class="university">
+                <option value="">Select</option>
+                <?php
+                // Fetch universities from the database
+                $connection = mysqli_connect("localhost", "root", "", "jsuars");
+                if (mysqli_connect_errno()) {
+                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                    exit();
+                }
+
+                $query = "SELECT University_Code, University_Name FROM university";
+                $result = mysqli_query($connection, $query);
+
+                // Populate dropdown with universities
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='" . $row['University_Code'] . "'>" . $row['University_Name'] . "</option>";
+                }
+
+                // Close connection
+                mysqli_close($connection);
+                ?>
+            </select>
+
+            <br>
+
+            <label for="course1">Select Course:</label>
+            <select name="course1" class="course">
+                <!-- Courses will be populated dynamically using JavaScript -->
+            </select>
+        </div>
+
+
+        <div class="university-course-pair">
+            <label for="university1">Select University:</label>
+            <select name="university1" class="university">
+                <option value="">Select</option>
+                <?php
+                // Fetch universities from the database
+                $connection = mysqli_connect("localhost", "root", "", "jsuars");
+                if (mysqli_connect_errno()) {
+                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                    exit();
+                }
+
+                $query = "SELECT University_Code, University_Name FROM university";
+                $result = mysqli_query($connection, $query);
+
+                // Populate dropdown with universities
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='" . $row['University_Code'] . "'>" . $row['University_Name'] . "</option>";
+                }
+
+                // Close connection
+                mysqli_close($connection);
+                ?>
+            </select>
+
+            <br>
+
+            <label for="course1">Select Course:</label>
+            <select name="course1" class="course">
+                <!-- Courses will be populated dynamically using JavaScript -->
+            </select>
+        </div>
+
+
 
 <?php
 include "action.php";
 ?>
-<div class="align-right">
-    <span class="details">Course 1:</span>
-    <select id="course1" name="course1" class="col-75">
-        <option value="">Select Course</option>
-        <?php echo $options; ?>
-    </select><br><br>
-
-    <span class="details">Course 2:</span>
-    <select id="course2" name="course2" class="col-75">
-        <option value="">Select Course</option>
-       <option value="">Select Course</option>
-        <?php echo $options; ?>
-    </select><br><br>
-
-    <span class="details">Course 3:</span>
-    <select id="course3" name="course3" class="col-75">
-        <option value="">Select Course</option>
-        <option value="">Select Course</option>
-        <?php echo $options; ?>
-    </select>
-</div>
 
   </div><br><br><br><br><br><br><br><br>
 
@@ -199,3 +252,28 @@ include "action.php";
   </script>
 </body>
 </html>
+
+ <script>
+        // Function to populate courses based on selected university
+        function populateCourses(universityElement, courseElement) {
+            var universityId = universityElement.value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    courseElement.innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", "get_courses.php?university_id=" + universityId, true);
+            xhttp.send();
+        }
+
+        // Attach event listeners to each university dropdown to populate corresponding courses
+        var universityElements = document.querySelectorAll('.university');
+        var courseElements = document.querySelectorAll('.course');
+
+        universityElements.forEach(function(universityElement, index) {
+            universityElement.addEventListener('change', function() {
+                populateCourses(universityElement, courseElements[index]);
+            });
+        });
+    </script>
